@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Store</h1>
+  <div class="product-grid">
+  {% for product in products %}
+    <article class="card product-card">
+      <div class="card-media">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">{{ product.name }}</h2>
+        <p class="card-text">{{ product.description }}</p>
+        <div class="meta">
+          <span class="price">${{ product.price }}</span>
+          <span class="stock">{{ product.amount_left }} left</span>
+        </div>
+        {% if user.is_superuser %}
+          <a class="btn btn-secondary" href="{% url 'edit_product' product.id %}">Edit</a>
+        {% elif user.is_authenticated %}
+          <form class="inline-form" method="post" action="{% url 'buy_product' %}">
+            {% csrf_token %}
+            {{ order_form.as_p }}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit" class="btn">Buy {{ product.name }}</button>
+          </form>
+        {% else %}
+          <!-- Not logged in: show products only, no buy form -->
+        {% endif %}
+      </div>
+    </article>
+  {% empty %}
+    <p>No products yet.</p>
+  {% endfor %}
+  </div>
+  {% include 'helpers/pagination.html' %}
+{% endblock %}

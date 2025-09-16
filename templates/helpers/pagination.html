@@ -1,0 +1,16 @@
+{% if page_obj.paginator.num_pages > 1 %}
+
+<nav class="pagination">
+  <ul>
+    {% if page_obj.has_previous %}
+      <li><a href="?page=1" aria-label="First">&laquo; first</a></li>
+      <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">previous</a></li>
+    {% endif %}
+    <li class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next">next</a></li>
+      <li><a href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">last &raquo;</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

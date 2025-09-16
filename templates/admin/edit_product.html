@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit product{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h1 class="page-title">Edit product {{ object.name }}</h1>
+      {% if object.image %}
+        <div class="image-preview">
+          <img src="{{ object.image.url }}" alt="{{ object.name }}">
+        </div>
+      {% endif %}
+
+      <form class="auth-form" method="post" action="{% url 'edit_product' object.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-block">Edit product</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
