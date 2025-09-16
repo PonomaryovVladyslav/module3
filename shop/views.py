@@ -21,10 +21,6 @@ class ItemListView(LoginRequiredMixin, ListView):
     }
 
 
-class Login(LoginView):
-    template_name = 'auth/login.html'
-
-
 class RegisterView(CreateView):
     template_name = 'auth/register.html'
     form_class = UserCreateForm

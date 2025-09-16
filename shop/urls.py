@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
 from django.urls import path
 
-from shop.views import ItemListView, Login, RegisterView, AddProductView, EditProductView, RefundListView, \
+from shop.views import ItemListView, RegisterView, AddProductView, EditProductView, RefundListView, \
     MyOrderListView, BuyProductView, CreateRefundView, ApproveRefundView, DeclineRefundView
 
 admin_urlpatterns = [
@@ -16,7 +16,7 @@ admin_urlpatterns = [
 
 user_urlpatterns = [
     path('', ItemListView.as_view(), name='index'),
-    path('login/', Login.as_view(), name='login'),
+    path('login/', LoginView.as_view(template_name='auth/login.html'), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('my-orders/', MyOrderListView.as_view(), name='my_orders'),
