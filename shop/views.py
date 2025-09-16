@@ -15,7 +15,7 @@ class ItemListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'index.html'
     context_object_name = 'products'
-    paginate_by = 5
+    paginate_by = 16
     extra_context = {
         "order_form": OrderForm()
     }

@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block title %}Shop{% endblock %} • Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
-<div>
-    {% if user.is_authenticated %}
-        <div>Hello, {{ user.username }}.{% if not user.is_superuser %} You have {{ user.wallet }}$ on your balance. {% endif %}</div>
-        {% if user.is_superuser %}
-            <a href="{% url 'index' %}">Items list</a>
-            <a href="{% url 'add_product' %}">Add product</a>
-            <a href="{% url 'refunds' %}">Refunds</a>
-        {% else %}
-            <a href="{% url 'index' %}">Store</a>
-            <a href="{% url 'my_orders' %}">My orders</a>
-        {% endif %}
+<header class="navbar">
+    <div class="container nav-inner">
+        <a class="brand" href="{% url 'index' %}">Demo Shop</a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false">☰</button>
 
+        <nav class="nav-links">
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                    <a href="{% url 'index' %}">Items</a>
+                    <a href="{% url 'add_product' %}">Add product</a>
+                    <a href="{% url 'refunds' %}">Refunds</a>
+                {% else %}
+                    <a href="{% url 'index' %}">Store</a>
+                    <a href="{% url 'my_orders' %}">My orders</a>
+                    <span class="badge">Balance: ${{ user.wallet }}</span>
+                {% endif %}
+                <form class="logout-form" action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-ghost">Logout</button>
+                </form>
+            {% else %}
+                <a class="btn" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-secondary" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
 
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Register</a>
-    {% endif %}
-</div>
+<main class="container">
+    {% include 'helpers/messages.html' %}
+    {% block content %}{% endblock %}
+</main>
 
-{% include 'helpers/messages.html' %}
+<footer class="footer">
+    <div class="container">
+        <span>© 2025 Demo Shop</span>
+    </div>
+</footer>
 
-{% block content %}{% endblock %}
-
-<div>Footer</div>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

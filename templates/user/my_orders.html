@@ -3,28 +3,37 @@
 {% block title %}My orders{% endblock %}
 
 {% block content %}
-    {% for order in orders %}
-        <div>
-            <p>Item: {{ order.product.name }}</p>
-            <img style="width: 200px; height: 200px;" src="{{ order.product.image.url }}"
-                 alt="{{ order.product.name }}">
-            <p>Quantity: {{ order.quantity }}</p>
-            <p>Created at: {{ order.created_at }}</p>
-            {% if order.refund %}
-                <p>Refund is waiting for approval.</p>
-                <p>Refund reason: {{ order.refund.reason }}</p>
-            {% else %}
-                {% if order.is_refundable %}
-                    <form method="post" action="{% url 'create_refund' %}">
-                        {% csrf_token %}
-                        {{ refund_form.as_p }}
-                        <input type="hidden" name="order_id" value="{{ order.id }}">
-                        <button type="submit">Refund</button>
-                    </form>
-                {% endif %}
-            {% endif %}
+  <h1 class="page-title">My orders</h1>
+  <div class="product-grid">
+  {% for order in orders %}
+    <article class="card order-card">
+      <div class="card-media">
+        <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}">
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">{{ order.product.name }}</h2>
+        <div class="meta">
+          <span class="stock">Qty: {{ order.quantity }}</span>
+          <span class="small">{{ order.created_at }}</span>
         </div>
-        <br>
-    {% endfor %}
-    {% include 'helpers/pagination.html' %}
+        {% if order.refund %}
+          <p class="card-text">Refund is waiting for approval.</p>
+          <p class="card-text small">Reason: {{ order.refund.reason }}</p>
+        {% else %}
+          {% if order.is_refundable %}
+            <form class="refund-form" method="post" action="{% url 'create_refund' %}">
+              {% csrf_token %}
+              {{ refund_form.as_p }}
+              <input type="hidden" name="order_id" value="{{ order.id }}">
+              <button type="submit" class="btn btn-block">Refund</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </article>
+  {% empty %}
+    <p>No orders yet.</p>
+  {% endfor %}
+  </div>
+  {% include 'helpers/pagination.html' %}
 {% endblock %}

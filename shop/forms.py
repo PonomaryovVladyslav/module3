@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
+from django import forms
 
 from shop.models import Product, Order, Refund
 
@@ -12,11 +13,20 @@ class UserCreateForm(UserCreationForm):
         model = get_user_model()
         fields = ['username', 'email', 'password1', 'password2']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove verbose default help texts for a cleaner UI; validation still applies
+        for field in self.fields.values():
+            field.help_text = ''
+
 
 class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'image', 'amount_left']
+        widgets = {
+            'image': forms.FileInput(),
+        }
 
 
 class OrderForm(ModelForm):

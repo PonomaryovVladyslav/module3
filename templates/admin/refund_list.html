@@ -1,28 +1,38 @@
 {% extends 'base.html' %}
 
-{% block title %}Refund{% endblock %}
+{% block title %}Refunds{% endblock %}
 
 {% block content %}
-    {% for refund in refunds %}
-        <div>
-            <p>Reason: {{ refund.reason }}</p>
-            <p>From: {{ refund.order.user.username }}</p>
-            <p>Created at: {{ refund.created_at }}</p>
-            <p>Product: {{ refund.order.product.name }}</p>
-            <p>Quantity: {{ refund.order.quantity }}</p>
-            <img style="width: 200px; height: 200px;" src="{{ refund.order.product.image.url }}" alt="{{ refund.order.product.name }}">
-            <div>
-                <form method="post" action="{% url 'approve_refund' refund.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Approve</button>
-                </form>
-                <form method="post" action="{% url 'decline_refund' refund.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Decline</button>
-                </form>
-            </div>
+  <h1 class="page-title">Refunds</h1>
+  <div class="product-grid">
+  {% for refund in refunds %}
+    <article class="card refund-card">
+      <div class="card-media">
+        <img src="{{ refund.order.product.image.url }}" alt="{{ refund.order.product.name }}">
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">{{ refund.order.product.name }}</h2>
+        <p class="card-text">Reason: {{ refund.reason }}</p>
+        <div class="meta">
+          <span class="small">From: {{ refund.order.user.username }}</span>
+          <span class="small">{{ refund.created_at }}</span>
         </div>
-        <br>
-    {% endfor %}
-    {% include 'helpers/pagination.html' %}
+        <p class="small">Quantity: {{ refund.order.quantity }}</p>
+        <div class="actions">
+          <form method="post" action="{% url 'approve_refund' refund.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn">Approve</button>
+          </form>
+          <form method="post" action="{% url 'decline_refund' refund.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Decline</button>
+          </form>
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <p>No refund requests.</p>
+  {% endfor %}
+  </div>
+  {% include 'helpers/pagination.html' %}
 {% endblock %}

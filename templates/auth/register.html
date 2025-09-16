@@ -3,12 +3,14 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>Register</h1>
-    </div>
-    <form method="post" action="{% url 'register' %}">
-    {% csrf_token %}
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h1 class="page-title">Register</h1>
+      <form class="auth-form" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+        <button type="submit" class="btn btn-block">Register</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
