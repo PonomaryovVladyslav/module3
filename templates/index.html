@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content %}
+    {% for product in products %}
+        <div>
+            <h1>{{ product.name }}</h1>
+            <p>{{ product.description }}</p>
+            <p>{{ product.price }}</p>
+            <p>{{ product.amount_left }}</p>
+            <img style="width: 200px; height: 200px;" src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+        {% if user.is_superuser %}
+            <a href="{% url 'edit_product' product.id %}">Edit</a>
+        {% else %}
+            <form method="post" action="{% url 'buy_product' %}">
+                {% csrf_token %}
+                {{ order_form.as_p }}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <button type="submit">Buy {{ product.name }}</button>
+            </form>
+        {% endif %}
+        <br>
+    {% endfor %}
+    {% include 'helpers/pagination.html' %}
+{% endblock %}

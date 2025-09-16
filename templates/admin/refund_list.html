@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Refund{% endblock %}
+
+{% block content %}
+    {% for refund in refunds %}
+        <div>
+            <p>Reason: {{ refund.reason }}</p>
+            <p>From: {{ refund.order.user.username }}</p>
+            <p>Created at: {{ refund.created_at }}</p>
+            <p>Product: {{ refund.order.product.name }}</p>
+            <p>Quantity: {{ refund.order.quantity }}</p>
+            <img style="width: 200px; height: 200px;" src="{{ refund.order.product.image.url }}" alt="{{ refund.order.product.name }}">
+            <div>
+                <form method="post" action="{% url 'approve_refund' refund.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Approve</button>
+                </form>
+                <form method="post" action="{% url 'decline_refund' refund.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Decline</button>
+                </form>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    {% include 'helpers/pagination.html' %}
+{% endblock %}

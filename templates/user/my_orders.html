@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}My orders{% endblock %}
+
+{% block content %}
+    {% for order in orders %}
+        <div>
+            <p>Item: {{ order.product.name }}</p>
+            <img style="width: 200px; height: 200px;" src="{{ order.product.image.url }}"
+                 alt="{{ order.product.name }}">
+            <p>Quantity: {{ order.quantity }}</p>
+            <p>Created at: {{ order.created_at }}</p>
+            {% if order.refund %}
+                <p>Refund is waiting for approval.</p>
+                <p>Refund reason: {{ order.refund.reason }}</p>
+            {% else %}
+                {% if order.is_refundable %}
+                    <form method="post" action="{% url 'create_refund' %}">
+                        {% csrf_token %}
+                        {{ refund_form.as_p }}
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <button type="submit">Refund</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        <br>
+    {% endfor %}
+    {% include 'helpers/pagination.html' %}
+{% endblock %}
