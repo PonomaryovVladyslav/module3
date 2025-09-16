@@ -19,13 +19,15 @@
         </div>
         {% if user.is_superuser %}
           <a class="btn btn-secondary" href="{% url 'edit_product' product.id %}">Edit</a>
-        {% else %}
+        {% elif user.is_authenticated %}
           <form class="inline-form" method="post" action="{% url 'buy_product' %}">
             {% csrf_token %}
             {{ order_form.as_p }}
             <input type="hidden" name="product_id" value="{{ product.id }}">
             <button type="submit" class="btn">Buy {{ product.name }}</button>
           </form>
+        {% else %}
+          <!-- Not logged in: show products only, no buy form -->
         {% endif %}
       </div>
     </article>
