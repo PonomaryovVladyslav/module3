@@ -1,10 +1,10 @@
 import os
 
 DEBUG = False
-ALLOWED_HOSTS = ['3.144.135.54']
+ALLOWED_HOSTS = ['3.137.147.12']
 
 # Security for reverse proxy/HTTPS
-CSRF_TRUSTED_ORIGINS = ['http://3.144.135.54', 'https://3.144.135.54']
+CSRF_TRUSTED_ORIGINS = ['http://3.137.147.12', 'https://3.137.147.12']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
